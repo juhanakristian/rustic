@@ -1,0 +1,13 @@
+[project]
+name = "Rustic"
+dependencies = [
+    "pytest"
+]
+description = ""
+dynamic = ["version"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool]
