@@ -9,6 +9,11 @@ class TokenType(enum.Enum):
     IDENT = 2
     STRING = 3
 
+    # Operators
+    EQ = 201
+    PLUS = 202
+    MINUS = 203
+
 
 class Token:
     type: TokenType
@@ -71,10 +76,19 @@ class Lexer:
             # If the next character is a dot, we're dealing with a float
             if self.peek() == ".":
                 self.next_char()
+                # Continue reading digits until the float part ends
                 while self.peek().isdigit():
                     self.next_char()
                 value = self.source[position: self.current_position + 1]
             token = Token(TokenType.NUMBER, value)
+        elif self.current_char == "+":
+            token = Token(TokenType.PLUS, self.current_char)
+        elif self.current_char == "-":
+            token = Token(TokenType.MINUS, self.current_char)
+        elif self.current_char == "=":
+            if self.peek() == "=":
+                self.next_char()
+            token = Token(TokenType.EQ, self.current_char)
         elif self.current_char == "\0":
             token = Token(TokenType.EOF, "")
         else:

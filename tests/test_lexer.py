@@ -13,6 +13,7 @@ def test_tokenize_integers():
     assert tokens[2].type == TokenType.NUMBER
     assert tokens[2].value == "789"
 
+
 def test_tokenize_floats():
     lexer = Lexer()
     tokens = lexer.tokenize("123.123 456.3     789.0")
@@ -24,3 +25,24 @@ def test_tokenize_floats():
     assert tokens[1].value == "456.3"
     assert tokens[2].type == TokenType.NUMBER
     assert tokens[2].value == "789.0"
+
+
+def test_plus_sign():
+    lexer = Lexer()
+    tokens = lexer.tokenize("+")
+    assert len(tokens) == 1
+    assert tokens[0].type == TokenType.PLUS
+
+
+def test_minus_sign():
+    lexer = Lexer()
+    tokens = lexer.tokenize("-")
+    assert len(tokens) == 1
+    assert tokens[0].type == TokenType.MINUS
+
+
+def test_equal_sign():
+    lexer = Lexer()
+    tokens = lexer.tokenize("==")
+    assert len(tokens) == 1
+    assert tokens[0].type == TokenType.EQ
