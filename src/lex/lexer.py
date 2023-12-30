@@ -13,6 +13,14 @@ class TokenType(enum.Enum):
     EQ = 201
     PLUS = 202
     MINUS = 203
+    ASTERISK = 204
+    SLASH = 205
+    EQEQ = 206
+    NOTEQ = 207
+    LT = 208
+    LTEQ = 209
+    GT = 210
+    GTEQ = 211
 
 
 class Token:
@@ -48,7 +56,7 @@ class Lexer:
         self.source = input
         self.next_char()
         tokens = []
-        while self.current_char != "\0" or len(tokens) > 3:
+        while self.current_char != "\0":
             tokens.append(self.next_token())
         return tokens
 
@@ -64,6 +72,7 @@ class Lexer:
         Get the next token in the source string.
         :return:
         """
+        print("next_token", self.current_char)
         self.consume_whitespace()
         token = None
         if self.current_char.isdigit():
@@ -88,7 +97,27 @@ class Lexer:
         elif self.current_char == "=":
             if self.peek() == "=":
                 self.next_char()
-            token = Token(TokenType.EQ, self.current_char)
+                token = Token(TokenType.EQEQ, "==")
+            else:
+                token = Token(TokenType.EQ, self.current_char)
+        elif self.current_char == "<":
+            if self.peek() == "=":
+                self.next_char()
+                token = Token(TokenType.LTEQ, "<=")
+            else:
+                token = Token(TokenType.LT, self.current_char)
+        elif self.current_char == ">":
+            if self.peek() == "=":
+                self.next_char()
+                token = Token(TokenType.GTEQ, ">=")
+            else:
+                token = Token(TokenType.GT, self.current_char)
+        elif self.current_char == "!":
+            if self.peek() == "=":
+                self.next_char()
+                token = Token(TokenType.NOTEQ, "!=")
+            else:
+                self.abort("Expected !=, got !" + self.peek())
         elif self.current_char == "\0":
             token = Token(TokenType.EOF, "")
         else:

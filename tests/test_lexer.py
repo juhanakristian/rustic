@@ -45,4 +45,15 @@ def test_equal_sign():
     lexer = Lexer()
     tokens = lexer.tokenize("==")
     assert len(tokens) == 1
-    assert tokens[0].type == TokenType.EQ
+    assert tokens[0].type == TokenType.EQEQ
+
+def test_equality_operators():
+    lexer = Lexer()
+    tokens = lexer.tokenize("== < > >= <= !=")
+    assert len(tokens) == 6
+    assert tokens[0].type == TokenType.EQEQ
+    assert tokens[1].type == TokenType.LT
+    assert tokens[2].type == TokenType.GT
+    assert tokens[3].type == TokenType.GTEQ
+    assert tokens[4].type == TokenType.LTEQ
+    assert tokens[5].type == TokenType.NOTEQ
