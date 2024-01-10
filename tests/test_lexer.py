@@ -47,6 +47,7 @@ def test_equal_sign():
     assert len(tokens) == 1
     assert tokens[0].type == TokenType.EQEQ
 
+
 def test_equality_operators():
     lexer = Lexer()
     tokens = lexer.tokenize("== < > >= <= !=")
@@ -65,8 +66,16 @@ def test_asterisk():
     assert len(tokens) == 1
     assert tokens[0].type == TokenType.ASTERISK
 
+
 def test_slash():
     lexer = Lexer()
     tokens = lexer.tokenize("/")
     assert len(tokens) == 1
     assert tokens[0].type == TokenType.SLASH
+
+
+def test_newline():
+    lexer = Lexer()
+    tokens = lexer.tokenize("\n")
+    assert len(tokens) == 1
+    assert tokens[0].type == TokenType.NEWLINE

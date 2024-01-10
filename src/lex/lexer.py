@@ -9,6 +9,19 @@ class TokenType(enum.Enum):
     IDENT = 2
     STRING = 3
 
+    # Keywords.
+    LABEL = 101
+    GOTO = 102
+    PRINT = 103
+    INPUT = 104
+    LET = 105
+    IF = 106
+    THEN = 107
+    ENDIF = 108
+    WHILE = 109
+    REPEAT = 110
+    ENDWHILE = 111
+
     # Operators
     EQ = 201
     PLUS = 202
@@ -64,7 +77,7 @@ class Lexer:
         """
         Consume all whitespace until the next non-whitespace character.
         """
-        while self.current_char == " " or self.current_char == "\t" or self.current_char == "\n":
+        while self.current_char == " " or self.current_char == "\t" or self.current_char == "\r":
             self.next_char()
 
     def next_token(self) -> Token:
@@ -122,6 +135,9 @@ class Lexer:
                 token = Token(TokenType.NOTEQ, "!=")
             else:
                 self.abort("Expected !=, got !" + self.peek())
+        elif self.current_char == "\n":
+            print("NEWLINE")
+            token = Token(TokenType.NEWLINE, self.current_char)
         elif self.current_char == "\0":
             token = Token(TokenType.EOF, "")
         else:
