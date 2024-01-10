@@ -35,6 +35,13 @@ class TokenType(enum.Enum):
     GT = 210
     GTEQ = 211
 
+    @staticmethod
+    def is_keyword(token: str) -> bool:
+        for kind in TokenType:
+            if kind.name == token.upper() and 101 <= kind.value <= 111:
+                return True
+        return False
+
 
 class Token:
     type: TokenType
@@ -135,8 +142,19 @@ class Lexer:
                 token = Token(TokenType.NOTEQ, "!=")
             else:
                 self.abort("Expected !=, got !" + self.peek())
+        elif self.current_char.isalnum():
+            position = self.current_position
+            # Continue reading letters and digits until we hit a non-letter/digit character
+            while self.peek().isalnum():
+                self.next_char()
+            # Get the entire word
+            value = self.source[position: self.current_position + 1]
+            # Check if the word is a keyword
+            if TokenType.is_keyword(value):
+                token = Token(TokenType[value.upper()], value)
+            else:
+                token = Token(TokenType.IDENT, value)
         elif self.current_char == "\n":
-            print("NEWLINE")
             token = Token(TokenType.NEWLINE, self.current_char)
         elif self.current_char == "\0":
             token = Token(TokenType.EOF, "")

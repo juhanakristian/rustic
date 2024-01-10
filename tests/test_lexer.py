@@ -79,3 +79,26 @@ def test_newline():
     tokens = lexer.tokenize("\n")
     assert len(tokens) == 1
     assert tokens[0].type == TokenType.NEWLINE
+
+
+def test_control_flow_keywords():
+    lexer = Lexer()
+    tokens = lexer.tokenize("if endif while repeat endwhile then goto")
+    assert len(tokens) == 7
+    assert tokens[0].type == TokenType.IF
+    assert tokens[1].type == TokenType.ENDIF
+    assert tokens[2].type == TokenType.WHILE
+    assert tokens[3].type == TokenType.REPEAT
+    assert tokens[4].type == TokenType.ENDWHILE
+    assert tokens[5].type == TokenType.THEN
+    assert tokens[6].type == TokenType.GOTO
+
+
+def test_keywords():
+    lexer = Lexer()
+    tokens = lexer.tokenize("label print input let")
+    assert len(tokens) == 4
+    assert tokens[0].type == TokenType.LABEL
+    assert tokens[1].type == TokenType.PRINT
+    assert tokens[2].type == TokenType.INPUT
+    assert tokens[3].type == TokenType.LET
