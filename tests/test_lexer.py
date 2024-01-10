@@ -102,3 +102,16 @@ def test_keywords():
     assert tokens[1].type == TokenType.PRINT
     assert tokens[2].type == TokenType.INPUT
     assert tokens[3].type == TokenType.LET
+
+
+def test_identifiers():
+    lexer = Lexer()
+    tokens = lexer.tokenize("a b c")
+    assert len(tokens) == 3
+    assert tokens[0].type == TokenType.IDENT
+    assert tokens[0].value == "a"
+    assert tokens[1].type == TokenType.IDENT
+    assert tokens[1].value == "b"
+    assert tokens[2].type == TokenType.IDENT
+    assert tokens[2].value == "c"
+
