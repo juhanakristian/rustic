@@ -57,3 +57,16 @@ def test_equality_operators():
     assert tokens[3].type == TokenType.GTEQ
     assert tokens[4].type == TokenType.LTEQ
     assert tokens[5].type == TokenType.NOTEQ
+
+
+def test_asterisk():
+    lexer = Lexer()
+    tokens = lexer.tokenize("*")
+    assert len(tokens) == 1
+    assert tokens[0].type == TokenType.ASTERISK
+
+def test_slash():
+    lexer = Lexer()
+    tokens = lexer.tokenize("/")
+    assert len(tokens) == 1
+    assert tokens[0].type == TokenType.SLASH

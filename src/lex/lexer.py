@@ -94,6 +94,10 @@ class Lexer:
             token = Token(TokenType.PLUS, self.current_char)
         elif self.current_char == "-":
             token = Token(TokenType.MINUS, self.current_char)
+        elif self.current_char == "*":
+            token = Token(TokenType.ASTERISK, self.current_char)
+        elif self.current_char == "/":
+            token = Token(TokenType.SLASH, self.current_char)
         elif self.current_char == "=":
             if self.peek() == "=":
                 self.next_char()
