@@ -1,3 +1,4 @@
+import logging
 import sys
 
 from src.lex.lexer import TokenType, Lexer
@@ -33,3 +34,29 @@ class Parser:
 
     def abort(self, message: str):
         ...
+
+    def program(self):
+        logging.info("program")
+        while not self.check_token(TokenType.EOF):
+            self.statement()
+
+    def statement(self):
+        if self.check_token(TokenType.PRINT):
+            logging.info("print")
+            self.next_token()
+
+            if self.check_token(TokenType.STRING):
+                self.next_token()
+            else:
+                self.expression()
+        self.nl()
+
+    def expression(self):
+        ...
+
+    def nl(self):
+        logging.info("nl")
+
+        self.match(TokenType.NEWLINE)
+        while self.check_token(TokenType.NEWLINE):
+            self.next_token()

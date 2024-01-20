@@ -2,8 +2,8 @@ from src.lex.lexer import Lexer, TokenType
 
 
 def test_tokenize_integers():
-    lexer = Lexer()
-    tokens = lexer.tokenize("123 456     789")
+    lexer = Lexer("123 456     789")
+    tokens = lexer.tokenize()
 
     assert len(tokens) == 3
     assert tokens[0].type == TokenType.NUMBER
@@ -15,8 +15,8 @@ def test_tokenize_integers():
 
 
 def test_tokenize_floats():
-    lexer = Lexer()
-    tokens = lexer.tokenize("123.123 456.3     789.0")
+    lexer = Lexer("123.123 456.3     789.0")
+    tokens = lexer.tokenize()
 
     assert len(tokens) == 3
     assert tokens[0].type == TokenType.NUMBER
@@ -28,29 +28,29 @@ def test_tokenize_floats():
 
 
 def test_plus_sign():
-    lexer = Lexer()
-    tokens = lexer.tokenize("+")
+    lexer = Lexer("+")
+    tokens = lexer.tokenize()
     assert len(tokens) == 1
     assert tokens[0].type == TokenType.PLUS
 
 
 def test_minus_sign():
-    lexer = Lexer()
-    tokens = lexer.tokenize("-")
+    lexer = Lexer("-")
+    tokens = lexer.tokenize()
     assert len(tokens) == 1
     assert tokens[0].type == TokenType.MINUS
 
 
 def test_equal_sign():
-    lexer = Lexer()
-    tokens = lexer.tokenize("==")
+    lexer = Lexer("==")
+    tokens = lexer.tokenize()
     assert len(tokens) == 1
     assert tokens[0].type == TokenType.EQEQ
 
 
 def test_equality_operators():
-    lexer = Lexer()
-    tokens = lexer.tokenize("== < > >= <= !=")
+    lexer = Lexer("== < > >= <= !=")
+    tokens = lexer.tokenize()
     assert len(tokens) == 6
     assert tokens[0].type == TokenType.EQEQ
     assert tokens[1].type == TokenType.LT
@@ -61,29 +61,29 @@ def test_equality_operators():
 
 
 def test_asterisk():
-    lexer = Lexer()
-    tokens = lexer.tokenize("*")
+    lexer = Lexer("*")
+    tokens = lexer.tokenize()
     assert len(tokens) == 1
     assert tokens[0].type == TokenType.ASTERISK
 
 
 def test_slash():
-    lexer = Lexer()
-    tokens = lexer.tokenize("/")
+    lexer = Lexer("/")
+    tokens = lexer.tokenize()
     assert len(tokens) == 1
     assert tokens[0].type == TokenType.SLASH
 
 
 def test_newline():
-    lexer = Lexer()
-    tokens = lexer.tokenize("\n")
+    lexer = Lexer("\n")
+    tokens = lexer.tokenize()
     assert len(tokens) == 1
     assert tokens[0].type == TokenType.NEWLINE
 
 
 def test_control_flow_keywords():
-    lexer = Lexer()
-    tokens = lexer.tokenize("if endif while repeat endwhile then goto")
+    lexer = Lexer("if endif while repeat endwhile then goto")
+    tokens = lexer.tokenize()
     assert len(tokens) == 7
     assert tokens[0].type == TokenType.IF
     assert tokens[1].type == TokenType.ENDIF
@@ -95,8 +95,8 @@ def test_control_flow_keywords():
 
 
 def test_keywords():
-    lexer = Lexer()
-    tokens = lexer.tokenize("label print input let")
+    lexer = Lexer("label print input let")
+    tokens = lexer.tokenize()
     assert len(tokens) == 4
     assert tokens[0].type == TokenType.LABEL
     assert tokens[1].type == TokenType.PRINT
@@ -105,8 +105,8 @@ def test_keywords():
 
 
 def test_identifiers():
-    lexer = Lexer()
-    tokens = lexer.tokenize("a b c")
+    lexer = Lexer("a b c")
+    tokens = lexer.tokenize()
     assert len(tokens) == 3
     assert tokens[0].type == TokenType.IDENT
     assert tokens[0].value == "a"
@@ -115,3 +115,12 @@ def test_identifiers():
     assert tokens[2].type == TokenType.IDENT
     assert tokens[2].value == "c"
 
+
+def test_string_literals():
+    lexer = Lexer('"hello" "world"')
+    tokens = lexer.tokenize()
+    assert len(tokens) == 2
+    assert tokens[0].type == TokenType.STRING
+    assert tokens[0].value == "hello"
+    assert tokens[1].type == TokenType.STRING
+    assert tokens[1].value == "world"
