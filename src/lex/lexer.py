@@ -61,20 +61,18 @@ class Lexer:
     current_position: int
     current_char: str
 
-    def __init__(self):
+    def __init__(self, input: str):
         self.current_char = ""
         self.current_position = -1
+        self.source = input
+        self.next_char()
 
-    def tokenize(self, input: str) -> list[Token]:
+    def tokenize(self) -> list[Token]:
         """
         Tokenize the input string.
         :param input: Tiny BASIC source code
         :return: List of tokens
         """
-        self.current_char = ""
-        self.current_position = -1
-        self.source = input
-        self.next_char()
         tokens = []
         while self.current_char != "\0":
             tokens.append(self.next_token())
@@ -154,6 +152,18 @@ class Lexer:
                 token = Token(TokenType[value.upper()], value)
             else:
                 token = Token(TokenType.IDENT, value)
+        elif self.current_char == "\"":
+            self.next_char()
+            position = self.current_position
+            # Continue reading characters until we hit a non-letter/digit character
+            while self.current_char != "\"":
+                if (self.current_char == "\r" or self.current_char == "\n" or self.current_char == "\t"
+                        or self.current_char == "\\" or self.current_char == "%"):
+                    self.abort("Illegal character in string.")
+                self.next_char()
+            # Get the entire word
+            value = self.source[position: self.current_position]
+            token = Token(TokenType.STRING, value)
         elif self.current_char == "\n":
             token = Token(TokenType.NEWLINE, self.current_char)
         elif self.current_char == "\0":
