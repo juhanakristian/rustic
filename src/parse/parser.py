@@ -49,9 +49,55 @@ class Parser:
                 self.next_token()
             else:
                 self.expression()
+        elif self.check_token(TokenType.IF):
+            logging.info("if")
+            self.next_token()
+            self.comparison()
+
+            self.match(TokenType.THEN)
+            self.nl()
+
+            while not self.check_token(TokenType.ENDIF):
+                self.statement()
+            self.match(TokenType.ENDIF)
+        elif self.check_token(TokenType.WHILE):
+            logging.info("while")
+            self.next_token()
+            self.comparison()
+
+            self.match(TokenType.REPEAT)
+            self.nl()
+
+            while not self.check_token(TokenType.ENDWHILE):
+                self.statement()
+            self.match(TokenType.ENDWHILE)
+        elif self.check_token(TokenType.LABEL):
+            logging.info("label")
+            self.next_token()
+            self.match(TokenType.IDENT)
+        elif self.check_token(TokenType.GOTO):
+            logging.info("goto")
+            self.next_token()
+            self.match(TokenType.IDENT)
+        elif self.check_token(TokenType.LET):
+            logging.info("let")
+            self.next_token()
+            self.match(TokenType.IDENT)
+            self.match(TokenType.EQ)
+            self.expression()
+        elif self.check_token(TokenType.INPUT):
+            logging.info("input")
+            self.next_token()
+            self.match(TokenType.IDENT)
+        else:
+            self.abort(f"Invalid statement at {self.current_token.value}")
+
         self.nl()
 
     def expression(self):
+        ...
+
+    def comparison(self):
         ...
 
     def nl(self):
