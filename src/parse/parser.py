@@ -102,7 +102,23 @@ class Parser:
         ...
 
     def comparison(self):
-        ...
+        """
+        comparison ::= expression (("==" | "!=" | ">" | ">=" | "<" | "<=") expression)+
+        """
+        logging.info("comparison")
+
+        self.expression()
+
+        if self.is_comparison_operator():
+            self.next_token()
+            self.expression()
+        else:
+            self.abort(f"Expected comparison operator at {self.current_token.value}")
+
+    def is_comparison_operator(self) -> bool:
+        return self.check_token(TokenType.EQEQ) or self.check_token(TokenType.NOTEQ) or self.check_token(
+            TokenType.LT) or self.check_token(TokenType.LTEQ) or self.check_token(TokenType.GT) or self.check_token(
+            TokenType.GTEQ)
 
     def nl(self):
         logging.info("nl")
