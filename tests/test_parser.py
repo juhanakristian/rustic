@@ -7,3 +7,10 @@ def test_print_statement():
     parser = Parser(lexer)
 
     parser.program()
+
+
+def test_goto_statement():
+    lexer = Lexer('LABEL loop\nprint "hello"\ngoto loop\n')
+    parser = Parser(lexer)
+
+    parser.program()
