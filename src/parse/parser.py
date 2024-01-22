@@ -33,10 +33,14 @@ class Parser:
         self.peek_token = self.lexer.next_token()
 
     def abort(self, message: str):
-        ...
+        raise SyntaxError(message)
 
     def program(self):
         logging.info("program")
+        # Consume all newlines at the start
+        while self.check_token(TokenType.NEWLINE):
+            self.next_token()
+
         while not self.check_token(TokenType.EOF):
             self.statement()
 
