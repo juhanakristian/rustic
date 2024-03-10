@@ -144,7 +144,6 @@ class Parser:
         comparison ::= expression (("==" | "!=" | ">" | ">=" | "<" | "<=") expression)+
         """
         logging.info("comparison")
-
         self.expression()
 
         if self.is_comparison_operator():
