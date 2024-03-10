@@ -14,6 +14,10 @@ class Parser:
         self.peek_token = None
         self.lexer = lexer
 
+        self.symbols = set()
+        self.labels_declared = set()
+        self.labels_gotoed = set()
+
         self.next_token()
         self.next_token()
 
@@ -43,6 +47,10 @@ class Parser:
 
         while not self.check_token(TokenType.EOF):
             self.statement()
+
+        for label in self.labels_gotoed:
+            if label not in self.labels_declared:
+                self.abort(f"Attempting to GOTO to undeclared label {label}")
 
     def statement(self):
         if self.check_token(TokenType.PRINT):
@@ -78,20 +86,32 @@ class Parser:
         elif self.check_token(TokenType.LABEL):
             logging.info("label")
             self.next_token()
+            # Check if label already exists
+            if self.current_token.value in self.labels_declared:
+                self.abort(f"Label {self.current_token.value} already exists")
+
+            self.labels_declared.add(self.current_token.value)
             self.match(TokenType.IDENT)
         elif self.check_token(TokenType.GOTO):
             logging.info("goto")
             self.next_token()
+            self.labels_gotoed.add(self.current_token.value)
             self.match(TokenType.IDENT)
         elif self.check_token(TokenType.LET):
             logging.info("let")
             self.next_token()
+            if self.current_token.value not in self.symbols:
+                self.symbols.add(self.current_token.value)
+
             self.match(TokenType.IDENT)
             self.match(TokenType.EQ)
             self.expression()
         elif self.check_token(TokenType.INPUT):
             logging.info("input")
             self.next_token()
+            if self.current_token.value not in self.symbols:
+                self.symbols.add(self.current_token.value)
+
             self.match(TokenType.IDENT)
         else:
             self.abort(f"Invalid statement at {self.current_token.value}")
@@ -125,6 +145,8 @@ class Parser:
         if self.check_token(TokenType.NUMBER):
             self.next_token()
         elif self.check_token(TokenType.IDENT):
+            if self.current_token.value not in self.symbols:
+                self.abort(f"Referencing variable before assignment: {self.current_token.value}")
             self.next_token()
         else:
             self.abort(f"Unexpected token at {self.current_token.value}")

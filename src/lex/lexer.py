@@ -90,7 +90,6 @@ class Lexer:
         Get the next token in the source string.
         :return:
         """
-        print("next_token", self.current_char)
         self.consume_whitespace()
         token = None
         if self.current_char.isdigit():
