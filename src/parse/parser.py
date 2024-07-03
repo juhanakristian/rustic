@@ -1,6 +1,7 @@
 import logging
 import sys
 
+from src.ast.nodes import ASTNode, PrintNode, BinaryOpNode, UnaryOpNode, PrimaryNode
 from src.lex.lexer import TokenType, Lexer
 
 
@@ -52,15 +53,18 @@ class Parser:
             if label not in self.labels_declared:
                 self.abort(f"Attempting to GOTO to undeclared label {label}")
 
-    def statement(self):
+    def statement(self) -> ASTNode:
         if self.check_token(TokenType.PRINT):
             logging.info("print")
             self.next_token()
 
             if self.check_token(TokenType.STRING):
+                value = self.current_token.value
                 self.next_token()
+                return PrintNode(value)
             else:
-                self.expression()
+                expression = self.expression()
+                return PrintNode(expression)
         elif self.check_token(TokenType.IF):
             logging.info("if")
             self.next_token()
@@ -105,7 +109,7 @@ class Parser:
 
             self.match(TokenType.IDENT)
             self.match(TokenType.EQ)
-            self.expression()
+            return self.expression()
         elif self.check_token(TokenType.INPUT):
             logging.info("input")
             self.next_token()
@@ -118,48 +122,66 @@ class Parser:
 
         self.nl()
 
-    def term(self):
+    def term(self) -> ASTNode:
         """
         term ::= unary {( "*" | "/" ) unary}
         """
         logging.info("term")
-        self.unary()
+        left = self.unary()
         while self.check_token(TokenType.ASTERISK) or self.check_token(TokenType.SLASH):
+            operator = self.current_token.type
             self.next_token()
-            self.unary()
+            right = self.unary()
+            left = BinaryOpNode(left, operator, right)
 
-    def unary(self):
+        return left
+
+    def unary(self) -> ASTNode:
         """
         unary ::= ["+" | "-"] primary
         """
         logging.info("unary")
         if self.check_token(TokenType.PLUS) or self.check_token(TokenType.MINUS):
+            operator = self.current_token.type
             self.next_token()
-        self.primary()
+            operand = self.primary()
+            return UnaryOpNode(operator, operand)
 
-    def primary(self):
+        return self.primary()
+
+    def primary(self) -> ASTNode:
         """
         primary ::= number | ident
         """
         logging.info("primary")
         if self.check_token(TokenType.NUMBER):
+            value = self.current_token.value
             self.next_token()
+            return PrimaryNode(value)
         elif self.check_token(TokenType.IDENT):
             if self.current_token.value not in self.symbols:
                 self.abort(f"Referencing variable before assignment: {self.current_token.value}")
+            value = self.current_token.value
             self.next_token()
+            return PrimaryNode(value)
         else:
             self.abort(f"Unexpected token at {self.current_token.value}")
 
-    def expression(self):
+    def expression(self) -> ASTNode:
         """
         expression ::= term {( "-" | "+" ) term}
         """
         logging.info("expression")
-        self.term()
+        first_term = self.term()
         while self.check_token(TokenType.PLUS) or self.check_token(TokenType.MINUS):
+            operator = self.current_token.type
             self.next_token()
-            self.term()
+            next_term = self.term()
+            first_term = BinaryOpNode(first_term, operator, next_term)
+
+        return first_term
+
+
 
     def comparison(self):
         """
