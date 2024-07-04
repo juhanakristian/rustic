@@ -15,10 +15,18 @@ class LetNode(ASTNode):
 
 
 class IfNode(ASTNode):
-    def __init__(self, condition, then_branch, else_branch):
+    def __init__(self, condition: ASTNode, then_branch: list[ASTNode]):
         self.condition = condition
         self.then_branch = then_branch
-        self.else_branch = else_branch
+
+class ComparisonNode:
+    def __init__(self, left, operator, right):
+        self.left = left
+        self.operator = operator
+        self.right = right
+
+    def __repr__(self):
+        return f'ComparisonNode({self.left}, {self.operator}, {self.right})'
 
 
 class WhileNode(ASTNode):

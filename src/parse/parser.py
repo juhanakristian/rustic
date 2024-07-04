@@ -1,7 +1,7 @@
 import logging
 import sys
 
-from src.ast.nodes import ASTNode, PrintNode, BinaryOpNode, UnaryOpNode, PrimaryNode
+from src.ast.nodes import ASTNode, PrintNode, BinaryOpNode, UnaryOpNode, PrimaryNode, IfNode, ComparisonNode
 from src.lex.lexer import TokenType, Lexer
 
 
@@ -68,14 +68,17 @@ class Parser:
         elif self.check_token(TokenType.IF):
             logging.info("if")
             self.next_token()
-            self.comparison()
+            condition = self.comparison()
 
             self.match(TokenType.THEN)
             self.nl()
 
+            then_branch = []
             while not self.check_token(TokenType.ENDIF):
-                self.statement()
+                then_branch.append(self.statement())
+
             self.match(TokenType.ENDIF)
+            return IfNode(condition, then_branch)
         elif self.check_token(TokenType.WHILE):
             logging.info("while")
             self.next_token()
@@ -182,23 +185,28 @@ class Parser:
         return first_term
 
 
-
     def comparison(self):
         """
         comparison ::= expression (("==" | "!=" | ">" | ">=" | "<" | "<=") expression)+
         """
         logging.info("comparison")
-        self.expression()
+        left = self.expression()
 
         if self.is_comparison_operator():
+            operator = self.current_token.type
             self.next_token()
-            self.expression()
+            right = self.expression()
+            left = ComparisonNode(left, operator, right)
         else:
             self.abort(f"Expected comparison operator at {self.current_token.value}")
 
         while self.is_comparison_operator():
+            operator = self.current_token.type
             self.next_token()
-            self.expression()
+            right = self.expression()
+            left = ComparisonNode(left, operator, right)
+
+        return left
 
     def is_comparison_operator(self) -> bool:
         return self.check_token(TokenType.EQEQ) or self.check_token(TokenType.NOTEQ) or self.check_token(
