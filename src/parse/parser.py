@@ -1,7 +1,8 @@
 import logging
 import sys
 
-from src.ast.nodes import ASTNode, PrintNode, BinaryOpNode, UnaryOpNode, PrimaryNode, IfNode, ComparisonNode
+from src.ast.nodes import ASTNode, PrintNode, BinaryOpNode, UnaryOpNode, PrimaryNode, IfNode, ComparisonNode, WhileNode, \
+    LetNode, InputNode
 from src.lex.lexer import TokenType, Lexer
 
 
@@ -82,44 +83,51 @@ class Parser:
         elif self.check_token(TokenType.WHILE):
             logging.info("while")
             self.next_token()
-            self.comparison()
+            condition = self.comparison()
 
             self.match(TokenType.REPEAT)
             self.nl()
 
+            body = []
             while not self.check_token(TokenType.ENDWHILE):
-                self.statement()
+                body.append(self.statement())
             self.match(TokenType.ENDWHILE)
-        elif self.check_token(TokenType.LABEL):
-            logging.info("label")
-            self.next_token()
-            # Check if label already exists
-            if self.current_token.value in self.labels_declared:
-                self.abort(f"Label {self.current_token.value} already exists")
-
-            self.labels_declared.add(self.current_token.value)
-            self.match(TokenType.IDENT)
-        elif self.check_token(TokenType.GOTO):
-            logging.info("goto")
-            self.next_token()
-            self.labels_gotoed.add(self.current_token.value)
-            self.match(TokenType.IDENT)
+            return WhileNode(condition, body)
+        # elif self.check_token(TokenType.LABEL):
+        #     logging.info("label")
+        #     self.next_token()
+        #     # Check if label already exists
+        #     if self.current_token.value in self.labels_declared:
+        #         self.abort(f"Label {self.current_token.value} already exists")
+        #
+        #     self.labels_declared.add(self.current_token.value)
+        #     self.match(TokenType.IDENT)
+        # elif self.check_token(TokenType.GOTO):
+        #     logging.info("goto")
+        #     self.next_token()
+        #     self.labels_gotoed.add(self.current_token.value)
+        #     self.match(TokenType.IDENT)
         elif self.check_token(TokenType.LET):
             logging.info("let")
             self.next_token()
+            variable = self.current_token.value
             if self.current_token.value not in self.symbols:
                 self.symbols.add(self.current_token.value)
 
             self.match(TokenType.IDENT)
             self.match(TokenType.EQ)
-            return self.expression()
+
+            expression = self.expression()
+            return LetNode(variable, expression)
         elif self.check_token(TokenType.INPUT):
             logging.info("input")
             self.next_token()
+            variable = self.current_token.value
             if self.current_token.value not in self.symbols:
                 self.symbols.add(self.current_token.value)
 
             self.match(TokenType.IDENT)
+            return InputNode(variable)
         else:
             self.abort(f"Invalid statement at {self.current_token.value}")
 

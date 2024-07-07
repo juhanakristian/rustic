@@ -7,6 +7,9 @@ class PrintNode(ASTNode):
     def __init__(self, value: str | ASTNode):
         self.value = value
 
+class InputNode(ASTNode):
+    def __init__(self, variable):
+        self.variable = variable
 
 class LetNode(ASTNode):
     def __init__(self, variable, expression):
@@ -33,20 +36,6 @@ class WhileNode(ASTNode):
     def __init__(self, condition, body):
         self.condition = condition
         self.body = body
-
-class GotoNode(ASTNode):
-    def __init__(self, label):
-        self.label = label
-
-
-class LabelNode(ASTNode):
-    def __init__(self, label):
-        self.label = label
-
-
-class InputNode(ASTNode):
-    def __init__(self, variable):
-        self.variable = variable
 
 
 class PrimaryNode(ASTNode):
