@@ -1,8 +1,18 @@
 import logging
-import sys
 
-from src.ast.nodes import ASTNode, PrintNode, BinaryOpNode, UnaryOpNode, PrimaryNode, IfNode, ComparisonNode, WhileNode, \
-    LetNode, InputNode
+from src.ast.nodes import (
+    ASTNode,
+    PrintNode,
+    BinaryOpNode,
+    UnaryOpNode,
+    PrimaryNode,
+    IfNode,
+    ComparisonNode,
+    WhileNode,
+    LetNode,
+    InputNode,
+    BlockNode,
+)
 from src.lex.lexer import TokenType, Lexer
 
 
@@ -31,7 +41,9 @@ class Parser:
 
     def match(self, kind: TokenType):
         if not self.check_token(kind):
-            raise SyntaxError(f"Expected {kind.name} but got {self.current_token.type.name}")
+            raise SyntaxError(
+                f"Expected {kind.name} but got {self.current_token.type.name}"
+            )
         self.next_token()
 
     def next_token(self):
@@ -47,12 +59,11 @@ class Parser:
         while self.check_token(TokenType.NEWLINE):
             self.next_token()
 
+        statements = []
         while not self.check_token(TokenType.EOF):
-            self.statement()
+            statements.append(self.statement())
 
-        for label in self.labels_gotoed:
-            if label not in self.labels_declared:
-                self.abort(f"Attempting to GOTO to undeclared label {label}")
+        return BlockNode(statements)
 
     def statement(self) -> ASTNode:
         if self.check_token(TokenType.PRINT):
@@ -171,7 +182,9 @@ class Parser:
             return PrimaryNode(value)
         elif self.check_token(TokenType.IDENT):
             if self.current_token.value not in self.symbols:
-                self.abort(f"Referencing variable before assignment: {self.current_token.value}")
+                self.abort(
+                    f"Referencing variable before assignment: {self.current_token.value}"
+                )
             value = self.current_token.value
             self.next_token()
             return PrimaryNode(value)
@@ -191,7 +204,6 @@ class Parser:
             first_term = BinaryOpNode(first_term, operator, next_term)
 
         return first_term
-
 
     def comparison(self):
         """
@@ -217,9 +229,14 @@ class Parser:
         return left
 
     def is_comparison_operator(self) -> bool:
-        return self.check_token(TokenType.EQEQ) or self.check_token(TokenType.NOTEQ) or self.check_token(
-            TokenType.LT) or self.check_token(TokenType.LTEQ) or self.check_token(TokenType.GT) or self.check_token(
-            TokenType.GTEQ)
+        return (
+            self.check_token(TokenType.EQEQ)
+            or self.check_token(TokenType.NOTEQ)
+            or self.check_token(TokenType.LT)
+            or self.check_token(TokenType.LTEQ)
+            or self.check_token(TokenType.GT)
+            or self.check_token(TokenType.GTEQ)
+        )
 
     def nl(self):
         logging.info("nl")

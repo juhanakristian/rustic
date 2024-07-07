@@ -83,3 +83,11 @@ class BinaryOpNode(ASTNode):
 
     def __repr__(self):
         return f"BinaryOpNode({self.left}, {self.operator}, {self.right})"
+
+
+class BlockNode(ASTNode):
+    def __init__(self, statements: list[ASTNode]):
+        self.statements = statements
+
+    def __repr__(self):
+        return f"BlockNode({self.statements})"
