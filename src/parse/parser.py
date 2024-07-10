@@ -13,7 +13,7 @@ from src.ast.nodes import (
     InputNode,
     BlockNode,
 )
-from src.lex.lexer import TokenType, Lexer
+from src.lex.lexer import TokenType, Lexer, Token
 
 
 class SyntaxError(Exception):
@@ -46,7 +46,7 @@ class Parser:
             )
         self.next_token()
 
-    def next_token(self):
+    def next_token(self) -> Token:
         self.current_token = self.peek_token
         self.peek_token = self.lexer.next_token()
 
@@ -66,7 +66,9 @@ class Parser:
         return BlockNode(statements)
 
     def statement(self) -> ASTNode:
-        if self.check_token(TokenType.PRINT):
+        if self.check_token(TokenType.NEWLINE):
+            self.nl()
+        elif self.check_token(TokenType.PRINT):
             logging.info("print")
             self.next_token()
 
@@ -141,8 +143,6 @@ class Parser:
             return InputNode(variable)
         else:
             self.abort(f"Invalid statement at {self.current_token.value}")
-
-        self.nl()
 
     def term(self) -> ASTNode:
         """
