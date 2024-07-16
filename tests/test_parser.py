@@ -3,10 +3,12 @@ from src.parse.parser import Parser
 
 
 def test_print_statement():
-    lexer = Lexer('print "hello"\n')
+    lexer = Lexer('print "hello"')
     parser = Parser(lexer)
 
-    parser.program()
+    ast = parser.program()
+
+    assert str(ast) == "BlockNode([PrintNode(hello)])"
 
 
 def test_basic_expressions():
@@ -50,4 +52,4 @@ def test_fibonacci():
 
     lexer = Lexer(code)
     parser = Parser(lexer)
-    parser.program()
+    print(parser.program())
