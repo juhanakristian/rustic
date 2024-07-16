@@ -3,7 +3,7 @@ from src.parse.parser import Parser
 
 
 def test_print_statement():
-    lexer = Lexer('print "hello"')
+    lexer = Lexer('print "hello"\n')
     parser = Parser(lexer)
 
     ast = parser.program()

@@ -61,7 +61,11 @@ class Parser:
 
         statements = []
         while not self.check_token(TokenType.EOF):
-            statements.append(self.statement())
+            stmt = self.statement()
+            if not stmt:
+                continue
+
+            statements.append(stmt)
 
         return BlockNode(statements)
 
