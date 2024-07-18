@@ -14,13 +14,23 @@ def test_print_statement():
 def test_basic_expressions():
     lexer = Lexer("let foo = 3 + 2\n")
     parser = Parser(lexer)
-    parser.program()
+    ast = parser.program()
+
+    assert (
+        str(ast)
+        == "BlockNode([LetNode(foo, BinaryOpNode(PrimaryNode(3), TokenType.PLUS, PrimaryNode(2)))])"
+    )
 
 
 def test_basic_conditional():
     lexer = Lexer('let foo = 3 + 2\nif foo > 0 then\nprint "yes"\nendif\n')
     parser = Parser(lexer)
-    parser.program()
+    ast = parser.program()
+
+    assert (
+        str(ast)
+        == "BlockNode([LetNode(foo, BinaryOpNode(PrimaryNode(3), TokenType.PLUS, PrimaryNode(2)))])"
+    )
 
 
 def test_undeclared_variable():
@@ -52,4 +62,6 @@ def test_fibonacci():
 
     lexer = Lexer(code)
     parser = Parser(lexer)
-    print(parser.program())
+    ast = parser.program()
+
+    assert str(ast) == ""
