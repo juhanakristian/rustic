@@ -29,7 +29,7 @@ def test_basic_conditional():
 
     assert (
         str(ast)
-        == "BlockNode([LetNode(foo, BinaryOpNode(PrimaryNode(3), TokenType.PLUS, PrimaryNode(2)))])"
+        == "BlockNode([LetNode(foo, BinaryOpNode(PrimaryNode(3), TokenType.PLUS, PrimaryNode(2))), IfNode(ComparisonNode(PrimaryNode(foo), TokenType.GT, PrimaryNode(0)), [PrintNode(yes)])])"
     )
 
 

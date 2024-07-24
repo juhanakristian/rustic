@@ -62,7 +62,7 @@ class Parser:
         statements = []
         while not self.check_token(TokenType.EOF):
             stmt = self.statement()
-            if not stmt:
+            if stmt is None:
                 continue
 
             statements.append(stmt)
@@ -93,7 +93,11 @@ class Parser:
 
             then_branch = []
             while not self.check_token(TokenType.ENDIF):
-                then_branch.append(self.statement())
+                stmt = self.statement()
+                if stmt is None:
+                    continue
+
+                then_branch.append(stmt)
 
             self.match(TokenType.ENDIF)
             return IfNode(condition, then_branch)
@@ -107,7 +111,11 @@ class Parser:
 
             body = []
             while not self.check_token(TokenType.ENDWHILE):
-                body.append(self.statement())
+                stmt = self.statement()
+                if stmt is None:
+                    continue
+
+                body.append(stmt)
             self.match(TokenType.ENDWHILE)
             return WhileNode(condition, body)
         # elif self.check_token(TokenType.LABEL):
