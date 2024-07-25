@@ -11,7 +11,7 @@ from src.ast.nodes import (
     WhileNode,
     LetNode,
     InputNode,
-    BlockNode,
+    ProgramNode,
 )
 from src.lex.lexer import TokenType, Lexer, Token
 
@@ -67,7 +67,7 @@ class Parser:
 
             statements.append(stmt)
 
-        return BlockNode(statements)
+        return ProgramNode(statements)
 
     def statement(self) -> ASTNode:
         if self.check_token(TokenType.NEWLINE):
