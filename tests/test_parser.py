@@ -1,3 +1,4 @@
+import logging
 from src.lex.lexer import Lexer
 from src.parse.parser import Parser
 
@@ -63,5 +64,9 @@ def test_fibonacci():
     lexer = Lexer(code)
     parser = Parser(lexer)
     ast = parser.program()
+    logging.debug(str(ast))
 
-    assert str(ast) == ""
+    assert (
+        str(ast)
+        == "BlockNode([PrintNode(How many fibonacci numbers do you want?), InputNode(nums), PrintNode(), LetNode(a, PrimaryNode(0)), LetNode(b, PrimaryNode(1)), WhileNode(ComparisonNode(PrimaryNode(nums), TokenType.GT, PrimaryNode(0)), [PrintNode(PrimaryNode(a)), LetNode(c, BinaryOpNode(PrimaryNode(a), TokenType.PLUS, PrimaryNode(b))), LetNode(a, PrimaryNode(b)), LetNode(b, PrimaryNode(c)), LetNode(nums, BinaryOpNode(PrimaryNode(nums), TokenType.MINUS, PrimaryNode(1)))])])"
+    )
