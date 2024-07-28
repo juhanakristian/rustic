@@ -14,3 +14,15 @@ def test_print_emit():
     output = emitter.emit()
 
     assert output == 'fn main() {\nprintln("hello")\n}'
+
+
+def test_basic_expressions_emit():
+    lexer = Lexer("let foo = 3 + 2\n")
+    parser = Parser(lexer)
+    ast = parser.program()
+
+    emitter = Emitter(ast)
+
+    output = emitter.emit()
+
+    assert output == "fn main() {\nlet foo = 3 + 2\n}"
