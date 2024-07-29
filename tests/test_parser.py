@@ -9,7 +9,7 @@ def test_print_statement():
 
     ast = parser.program()
 
-    assert str(ast) == "BlockNode([PrintNode(hello)])"
+    assert str(ast) == "ProgramNode([PrintNode(hello)])"
 
 
 def test_basic_expressions():
@@ -19,7 +19,7 @@ def test_basic_expressions():
 
     assert (
         str(ast)
-        == "BlockNode([LetNode(foo, BinaryOpNode(PrimaryNode(3), TokenType.PLUS, PrimaryNode(2)))])"
+        == "ProgramNode([LetNode(foo, BinaryOpNode(PrimaryNode(3), TokenType.PLUS, PrimaryNode(2)))])"
     )
 
 
@@ -30,7 +30,7 @@ def test_basic_conditional():
 
     assert (
         str(ast)
-        == "BlockNode([LetNode(foo, BinaryOpNode(PrimaryNode(3), TokenType.PLUS, PrimaryNode(2))), IfNode(ComparisonNode(PrimaryNode(foo), TokenType.GT, PrimaryNode(0)), [PrintNode(yes)])])"
+        == "ProgramNode([LetNode(foo, BinaryOpNode(PrimaryNode(3), TokenType.PLUS, PrimaryNode(2))), IfNode(ComparisonNode(PrimaryNode(foo), TokenType.GT, PrimaryNode(0)), [PrintNode(yes)])])"
     )
 
 
@@ -68,5 +68,5 @@ def test_fibonacci():
 
     assert (
         str(ast)
-        == "BlockNode([PrintNode(How many fibonacci numbers do you want?), InputNode(nums), PrintNode(), LetNode(a, PrimaryNode(0)), LetNode(b, PrimaryNode(1)), WhileNode(ComparisonNode(PrimaryNode(nums), TokenType.GT, PrimaryNode(0)), [PrintNode(PrimaryNode(a)), LetNode(c, BinaryOpNode(PrimaryNode(a), TokenType.PLUS, PrimaryNode(b))), LetNode(a, PrimaryNode(b)), LetNode(b, PrimaryNode(c)), LetNode(nums, BinaryOpNode(PrimaryNode(nums), TokenType.MINUS, PrimaryNode(1)))])])"
+        == "ProgramNode([PrintNode(How many fibonacci numbers do you want?), InputNode(nums), PrintNode(), LetNode(a, PrimaryNode(0)), LetNode(b, PrimaryNode(1)), WhileNode(ComparisonNode(PrimaryNode(nums), TokenType.GT, PrimaryNode(0)), [PrintNode(PrimaryNode(a)), LetNode(c, BinaryOpNode(PrimaryNode(a), TokenType.PLUS, PrimaryNode(b))), LetNode(a, PrimaryNode(b)), LetNode(b, PrimaryNode(c)), LetNode(nums, BinaryOpNode(PrimaryNode(nums), TokenType.MINUS, PrimaryNode(1)))])])"
     )
