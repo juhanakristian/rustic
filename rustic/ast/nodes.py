@@ -1,4 +1,4 @@
-from src.lex.lexer import TokenType
+from lex.lexer import TokenType
 
 
 class ASTNode:
@@ -76,7 +76,7 @@ class UnaryOpNode(ASTNode):
 
 
 class BinaryOpNode(ASTNode):
-    def __init__(self, left, operator, right):
+    def __init__(self, left: ASTNode, operator, right: ASTNode):
         self.left = left
         self.operator = operator
         self.right = right

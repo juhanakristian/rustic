@@ -1,0 +1,5 @@
+LET foo = 3 + 2
+
+IF foo > 0 THEN
+  PRINT "YES!"
+ENDIF

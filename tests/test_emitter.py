@@ -1,6 +1,6 @@
-from src.emit.emitter import Emitter
-from src.lex.lexer import Lexer
-from src.parse.parser import Parser
+from rustic.emit.emitter import Emitter
+from rustic.lex.lexer import Lexer
+from rustic.parse.parser import Parser
 
 
 def test_print_emit():

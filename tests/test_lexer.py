@@ -1,4 +1,4 @@
-from src.lex.lexer import Lexer, TokenType
+from rustic.lex.lexer import Lexer, TokenType
 
 
 def test_tokenize_integers():

@@ -1,6 +1,6 @@
 import logging
 
-from src.ast.nodes import (
+from ast.nodes import (
     ASTNode,
     PrintNode,
     BinaryOpNode,
@@ -13,7 +13,7 @@ from src.ast.nodes import (
     InputNode,
     ProgramNode,
 )
-from src.lex.lexer import TokenType, Lexer, Token
+from lex.lexer import TokenType, Lexer, Token
 
 
 class SyntaxError(Exception):
