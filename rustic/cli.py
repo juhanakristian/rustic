@@ -8,7 +8,7 @@ from compiler.parse.parser import Parser
 
 class Rustic:
     def compile(self, input: str) -> str:
-        lexer = Lexer('print "hello"\n')
+        lexer = Lexer(input)
         parser = Parser(lexer)
 
         ast = parser.program()

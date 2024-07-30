@@ -1,4 +1,22 @@
+import enum
 from ..lex.lexer import TokenType
+
+
+class Operator(enum.Enum):
+    PLUS = 100
+    MINUS = 101
+    ASTERISK = 102
+    SLASH = 103
+
+
+class Comparator(enum.Enum):
+    EQ = 201
+    EQEQ = 206
+    NOTEQ = 207
+    LT = 208
+    LTEQ = 209
+    GT = 210
+    GTEQ = 211
 
 
 class ASTNode:
@@ -50,7 +68,7 @@ class ComparisonNode:
 
 
 class WhileNode(ASTNode):
-    def __init__(self, condition, body):
+    def __init__(self, condition: ASTNode, body: list[ASTNode]):
         self.condition = condition
         self.body = body
 
