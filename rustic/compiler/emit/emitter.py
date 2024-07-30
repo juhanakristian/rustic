@@ -1,5 +1,5 @@
-from lex.lexer import TokenType
-from ast.nodes import (
+from ..lex.lexer import TokenType
+from ..ast.nodes import (
     ASTNode,
     BinaryOpNode,
     ComparisonNode,

@@ -1,4 +1,4 @@
-from lex.lexer import TokenType
+from ..lex.lexer import TokenType
 
 
 class ASTNode:

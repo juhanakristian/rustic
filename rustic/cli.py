@@ -1,9 +1,9 @@
 import sys
 import argparse
 
-from emit.emitter import Emitter
-from lex.lexer import Lexer
-from parse.parser import Parser
+from compiler.emit.emitter import Emitter
+from compiler.lex.lexer import Lexer
+from compiler.parse.parser import Parser
 
 
 class Rustic:
