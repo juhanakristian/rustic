@@ -72,6 +72,10 @@ class Emitter:
                 operator = "+"
             elif node.operator == TokenType.MINUS:
                 operator = "-"
+            elif node.operator == TokenType.SLASH:
+                operator = "/"
+            elif node.operator == TokenType.ASTERISK:
+                operator = "*"
 
             return (
                 f"{self.emit_node(node.left)} {operator} {self.emit_node(node.right)}"
@@ -127,10 +131,16 @@ class Emitter:
             input = with_indent(
                 f"stdin().read_line(&mut {node.variable}_input);", indent
             )
-            variable = with_indent(
-                f'let mut {node.variable}: i32 = {node.variable}_input.trim().parse().expect("Input is not a integer");',
-                indent,
-            )
+            if node.variable in self.symbols:
+                variable = with_indent(
+                    f'{node.variable} = {node.variable}_input.trim().parse().expect("Input is not a integer");',
+                    indent,
+                )
+            else:
+                variable = with_indent(
+                    f'let mut {node.variable}: i32 = {node.variable}_input.trim().parse().expect("Input is not a integer");',
+                    indent,
+                )
 
             self.symbols.append(node.variable)
 
