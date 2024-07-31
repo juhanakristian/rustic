@@ -1,12 +1,9 @@
 # Rustic
 
-Rustic is a TinyBASIC subset compiler to Rust written in Python.
+Rustic is a TinyBASIC subset compiler to Rust written in Python. I built Rustic in order to learn the basics of compilers and parsers. It is not meant to be feature complete or useful in any other way.
 
-Based on Austin Henley's [Teeny Tiny Compiler blog series](https://austinhenley.com/blog/teenytinycompiler1.html)
+The lexer and parser are based on Austin Henley's [Teeny Tiny Compiler blog series](https://austinhenley.com/blog/teenytinycompiler1.html). Instead of emitting C code from the parser I decided to create an AST and a Rust emitter.
 
-
-## Motivation
-This is a project to learn about compilers and Rust. 
 
 
 ## Usage
